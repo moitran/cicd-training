@@ -15,8 +15,7 @@ class SampleService
      *
      * @return int
      */
-    public function sum(int $firstNumber, int $secondNumber)
-    {
+    public function sum(int $firstNumber, int $secondNumber) {
         return $firstNumber + $secondNumber;
     }
 }
