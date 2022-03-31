@@ -20,6 +20,8 @@ RUN chmod +x /usr/local/bin/docker-compose
 
 RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
+RUN echo 'xdebug.mode="coverage"' >> /etc/php/7.4/cli/php.ini
+
 USER jenkins
 
 RUN jenkins-plugin-cli --plugins "blueocean:1.25.3 docker-workflow:1.28"
