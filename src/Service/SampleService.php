@@ -4,6 +4,7 @@ namespace App\Service;
 
 /**
  * Class SampleService
+ *
  * @package App\Service
  */
 class SampleService
