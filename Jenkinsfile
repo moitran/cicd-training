@@ -16,7 +16,7 @@ pipeline {
     stage('PHP Code Sniffer') {
       agent any
       steps {
-        sh 'vendor/bin/phpcs src/Service'
+        sh 'vendor/bin/phpcs src/Service --standard=PSR2'
       }
     }
     stage('Unit Test') {
