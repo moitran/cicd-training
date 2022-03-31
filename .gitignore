@@ -15,7 +15,7 @@ docker/logs/
 .php-cs-fixer.cache
 .env.test
 ###< symfony/framework-bundle ###
-
+config/secrets/
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 /phpunit.xml
