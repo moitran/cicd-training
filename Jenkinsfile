@@ -4,8 +4,6 @@ pipeline {
     environment {
         APP_ENV = 'dev'
         DATABASE_URL = credentials("superheros-dev-db-url")
-        DOCKER_USERNAME = credentials("docker-user")
-        DOCKER_PASSWORD = credentials("docker-password")
         DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
     }
 
