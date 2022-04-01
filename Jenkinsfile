@@ -6,11 +6,15 @@ pipeline {
         DATABASE_URL = credentials("superheros-dev-db-url")
         DOCKER_TAG="${GIT_COMMIT.substring(0,7)}"
         DOCKER_IMAGE = 'moitran/cicd-training'
+        PR_STATE = "${GITHUB_PR_STATE}"
+        BRANCH_NAME = "${BRANCH_NAME}"
     }
 
     stages {
         stage('Build Code') {
             steps {
+                sh "echo ${PR_STATE}"
+                sh "echo ${BRANCH_NAME}"
                 sh 'php --version'
                 sh 'composer --version'
                 sh 'touch .env'
@@ -50,7 +54,7 @@ pipeline {
                 }
                 //clean to save disk
                 sh '''
-                    docker rmi $(docker images ${DOCKER_IMAGE} -a -q)
+                    docker rmi -f $(docker images ${DOCKER_IMAGE} -a -q)
                 '''
             }
         }
