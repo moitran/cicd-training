@@ -11,9 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger deploy_superheros_api
-        uses: appleboy/jenkins-action@master
+        uses: jabbukka/jenkins-trigger@main
         with:
           url: "http://ec2-3-0-92-247.ap-southeast-1.compute.amazonaws.com:8080/"
-          job: "deploy-superhero"
-          user: "moitran"
-          token: "11bc483ee3388c5e6910c04dac34ddf99c"
+          job_name: "deploy-superhero"
+          user_name: "moitran"
+          api_token: "11bc483ee3388c5e6910c04dac34ddf99c"
+          wait: "true"
+          timeout: "1000"
