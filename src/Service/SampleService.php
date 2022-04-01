@@ -17,7 +17,6 @@ class SampleService
      */
     public function sum(int $firstNumber, int $secondNumber)
     {
-        echo 111;
         return $firstNumber + $secondNumber;
     }
 }
