@@ -1,0 +1,20 @@
+name: Deploy
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+jobs:
+  deploy_superheros_api:
+    name: deploy_superheros_api
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger deploy_superheros_api
+        uses: toptal/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: "http://ec2-3-0-92-247.ap-southeast-1.compute.amazonaws.com:8080/"
+          jenkins_user: "moitran"
+          jenkins_token: "11bc483ee3388c5e6910c04dac34ddf99c"
+          job_name: "deploy-superhero"
+          job_timeout: "3600" # Default 30 sec. (optional)
