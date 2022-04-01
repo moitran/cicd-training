@@ -17,5 +17,3 @@ jobs:
           job: "deploy-superhero"
           user: "moitran"
           token: "11bc483ee3388c5e6910c04dac34ddf99c"
-          wait: "true"
-          timeout: "3600" # Default 30 sec. (optional)
