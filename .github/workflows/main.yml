@@ -14,8 +14,8 @@ jobs:
         uses: appleboy/jenkins-action@master
         with:
           url: "http://ec2-3-0-92-247.ap-southeast-1.compute.amazonaws.com:8080/"
-          job_name: "deploy-superhero"
-          user_name: "moitran"
-          api_token: "11bc483ee3388c5e6910c04dac34ddf99c"
+          job: "deploy-superhero"
+          user: "moitran"
+          token: "11bc483ee3388c5e6910c04dac34ddf99c"
           wait: "true"
           timeout: "3600" # Default 30 sec. (optional)
