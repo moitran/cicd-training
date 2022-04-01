@@ -4,7 +4,8 @@ pipeline {
     environment {
         APP_ENV = 'dev'
         DATABASE_URL = credentials("superheros-dev-db-url")
-        DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
+        DOCKER_TAG="${GIT_COMMIT.substring(0,7)}"
+        DOCKER_IMAGE = 'moitran/cicd-training'
     }
 
     stages {
@@ -34,8 +35,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t moitran/cicd-training:${DOCKER_TAG} -f Dockerfile-build .'
-                sh 'docker tag moitran/cicd-training:${DOCKER_TAG} moitran/cicd-training:latest'
+                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Dockerfile-build .'
+                sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest'
             }
         }
 
@@ -43,13 +44,14 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin"
-                    sh "docker push moitran/cicd-training:${DOCKER_TAG}"
-                    sh "docker push moitran/cicd-training:latest"
+                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    sh "docker push ${DOCKER_IMAGE}:latest"
 
                 }
                 //clean to save disk
-                sh "docker rmi moitran/cicd-training:${DOCKER_TAG}"
-                sh "docker rmi moitran/cicd-training:latest"
+                sh '''
+                    docker rmi $(docker images ${DOCKER_IMAGE} -a -q)
+                '''
             }
         }
     }
