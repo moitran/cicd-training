@@ -16,4 +16,4 @@ jobs:
           url: "http://ec2-3-0-92-247.ap-southeast-1.compute.amazonaws.com:8080/"
           job: "deploy-superhero"
           user: "moitran"
-          token: "11bc483ee3388c5e6910c0"
+          token: "11bc483ee3388c5e6910c04dac34ddf99c"
