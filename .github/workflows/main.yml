@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger deploy_superheros_api
-        uses: toptal/jenkins-job-trigger-action@master
+        uses: appleboy/jenkins-action@master
         with:
           jenkins_url: "http://ec2-3-0-92-247.ap-southeast-1.compute.amazonaws.com:8080/"
           jenkins_user: "moitran"
