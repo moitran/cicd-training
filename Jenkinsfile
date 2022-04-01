@@ -7,14 +7,14 @@ pipeline {
         DOCKER_TAG="${GIT_COMMIT.substring(0,7)}"
         DOCKER_IMAGE = 'moitran/cicd-training'
         PR_STATE = "${GITHUB_PR_STATE}"
-        BRANCH_NAME = "${BRANCH_NAME}"
+        GIT_BRANCH = "${GIT_BRANCH}"
     }
 
     stages {
         stage('Build Code') {
             steps {
                 sh "echo ${PR_STATE}"
-                sh "echo ${BRANCH_NAME}"
+                sh "echo ${GIT_BRANCH}"
                 sh 'php --version'
                 sh 'composer --version'
                 sh 'touch .env'
@@ -39,23 +39,31 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Dockerfile-build .'
-                sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest'
+                script {
+                    if (env.GIT_BRANCH == 'master') {
+                        sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Dockerfile-build .'
+                        sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest'
+                    }
+                }
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin"
-                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    sh "docker push ${DOCKER_IMAGE}:latest"
+                script {
+                    if (env.GIT_BRANCH == 'master') {
+                        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                            sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin"
+                            sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                            sh "docker push ${DOCKER_IMAGE}:latest"
 
+                        }
+                        //clean to save disk
+                        sh '''
+                            docker rmi -f $(docker images ${DOCKER_IMAGE} -a -q)
+                        '''
+                    }
                 }
-                //clean to save disk
-                sh '''
-                    docker rmi -f $(docker images ${DOCKER_IMAGE} -a -q)
-                '''
             }
         }
     }
