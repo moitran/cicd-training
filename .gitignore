@@ -10,8 +10,9 @@
 .idea/
 .DS_Store
 .env
-docker/database/data
-docker/logs/
+docker/local/database/data
+docker/jenkins/database/data
+docker/local/logs/
 .php-cs-fixer.cache
 .env.test
 ###< symfony/framework-bundle ###

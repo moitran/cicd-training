@@ -4,7 +4,7 @@ services:
   database:
     container_name: training_cicd_database
     build:
-      context: ./docker/database
+      context: ./docker/local/database
     environment:
       - MYSQL_DATABASE=rest_api
       - MYSQL_ROOT_PASSWORD=greatpwdroot
@@ -12,13 +12,13 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./docker/database/data:/var/lib/mysql
+      - ./docker/local/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/local/database/data:/var/lib/mysql
 
   php-fpm:
     container_name: training_cicd_phpfpm
     build:
-      context: ./docker/php-fpm
+      context: ./docker/local/php-fpm
     depends_on:
       - database
     environment:
@@ -33,13 +33,13 @@ services:
   nginx:
     container_name: training_cicd_nginx
     build:
-      context: ./docker/nginx
+      context: ./docker/local/nginx
     volumes:
       - ./:/var/www/
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./docker/nginx/sites/:/etc/nginx/sites-available
-      - ./docker/nginx/conf.d/:/etc/nginx/conf.d
-      - ./docker/logs:/var/log
+      - ./docker/local/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/local/nginx/sites/:/etc/nginx/sites-available
+      - ./docker/local/nginx/conf.d/:/etc/nginx/conf.d
+      - ./docker/local/logs:/var/log
     depends_on:
       - php-fpm
     ports:

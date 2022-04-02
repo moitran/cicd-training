@@ -63,6 +63,7 @@ pipeline {
                         //clean to save disk
                         sh '''
                             docker rmi -f $(docker images ${DOCKER_IMAGE} -a -q)
+                            docker image prune -a -f
                         '''
                     }
                 }
@@ -80,6 +81,7 @@ pipeline {
                                 docker stop superheroes-api || true
                                 docker rm superheroes-api || true
                                 docker image prune -a -f
+                                docker container prune -f
                                 docker run -d -p 80:80 --name superheroes-api --add-host host.docker.internal:host-gateway ${DOCKER_IMAGE}:latest
                                 exit
                             EOF'''
