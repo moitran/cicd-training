@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/moitran/cicd-training/branch/master/graph/badge.svg?token=LWXK4X2SVC)](https://codecov.io/gh/moitran/cicd-training)
 
 * Superheroes RESTful API is builded in Symfony 5
-* Build Jenkins server on AWS EC2 - Ubuntu Focal 20.04 (LTS)
+* Build Jenkins server on AWS EC2 - Ubuntu 20.04.3 LTS (GNU/Linux 5.11.0-1022-aws x86_64)
     * Installing Docker: https://docs.docker.com/engine/install/ubuntu/
     * Set up Jenkins & Mysql Database on EC2 by docker
         ```
