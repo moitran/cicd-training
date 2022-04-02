@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  database:
+    container_name: training_cicd_database
+    build:
+      context: ./docker/jenkins/database
+    environment:
+      - MYSQL_DATABASE=rest_api
+      - MYSQL_ROOT_PASSWORD=greatpwdroot # change me
+    command: mysqld --sql-mode=""
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/jenkins/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/jenkins/database/data:/var/lib/mysql
