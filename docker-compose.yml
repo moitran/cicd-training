@@ -7,7 +7,7 @@ services:
       context: ./docker/local/database
     environment:
       - MYSQL_DATABASE=rest_api
-      - MYSQL_ROOT_PASSWORD=greatpwdroot
+      - MYSQL_ROOT_PASSWORD=greatpwdroot # change me
     command: mysqld --sql-mode=""
     ports:
       - "3306:3306"
@@ -21,10 +21,6 @@ services:
       context: ./docker/local/php-fpm
     depends_on:
       - database
-    environment:
-      - APP_ENV=dev
-      - APP_SECRET=e614c43bd6af3da28277f9817c6363e8
-      - DATABASE_URL=mysql://root:greatpwdroot@database:3306/rest_api?serverVersion=5.7&charset=utf8mb4
     volumes:
       - ./:/var/www
     links:

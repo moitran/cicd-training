@@ -7,7 +7,7 @@ services:
       context: ./docker/jenkins/database
     environment:
       - MYSQL_DATABASE=rest_api
-      - MYSQL_ROOT_PASSWORD=greatpwdroot
+      - MYSQL_ROOT_PASSWORD=greatpwdroot # change me
     command: mysqld --sql-mode=""
     ports:
       - "3306:3306"
