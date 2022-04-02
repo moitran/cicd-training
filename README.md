@@ -32,3 +32,8 @@ docker-compose up -d
 ```
 
 Then access http://localhost/api on your machine browser. 
+<img width="1440" alt="image" src="https://user-images.githubusercontent.com/30226535/161372905-684e1e98-f806-4dd4-a327-499614cbd373.png">
+
+### Jenkins job workflow
+![CICD-training-jenkins-job-workflow](https://user-images.githubusercontent.com/30226535/161372988-e6e7176a-ddca-4765-878d-e66eecfd6dad.png)
+
