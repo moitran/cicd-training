@@ -17,7 +17,7 @@ pipeline {
                 sh "echo ${GIT_BRANCH}"
                 sh 'php --version'
                 sh 'composer --version'
-                sh 'touch .env'
+                sh 'rm .env && touch .env'
                 sh 'echo APP_ENV=${APP_ENV} >> .env'
                 sh 'echo DATABASE_URL=${DATABASE_URL} >> .env'
                 sh 'composer install --prefer-dist --no-interaction'
@@ -40,8 +40,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    if (env.GIT_BRANCH == 'master') {
-                        sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Dockerfile-build .'
+                    if (env.GIT_BRANCH == 'origin/master') {
+                        sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Dockerfile-deploy .'
                         sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest'
                     }
                 }
@@ -51,7 +51,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    if (env.GIT_BRANCH == 'master') {
+                    if (env.GIT_BRANCH == 'origin/master') {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                             sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin"
                             sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
@@ -62,6 +62,25 @@ pipeline {
                         sh '''
                             docker rmi -f $(docker images ${DOCKER_IMAGE} -a -q)
                         '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy on PROD') {
+            steps {
+                script {
+                    if (env.GIT_BRANCH == 'origin/master') {
+                        sshagent(credentials: ['ssh-ec2-id']) {
+                            sh '''
+                                ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-0-92-247.ap-southeast-1.compute.amazonaws.com << EOF
+                                docker pull ${DOCKER_IMAGE}
+                                docker stop superheroes-api || true
+                                docker rm superheroes-api || true
+                                docker run -d -p 80:80 --name superheroes-api --add-host host.docker.internal:host-gateway ${DOCKER_IMAGE}:latest
+                                exit
+                            EOF'''
+                        }
                     }
                 }
             }
