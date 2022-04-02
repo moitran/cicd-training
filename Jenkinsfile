@@ -4,6 +4,7 @@ pipeline {
     environment {
         APP_ENV = 'dev'
         DATABASE_URL = credentials("superheros-dev-db-url")
+        SUPERHEROS_API_CODECOV_TOKEN = credentials("superheros-api-codecov-token")
         DOCKER_TAG="${GIT_COMMIT.substring(0,7)}"
         DOCKER_IMAGE = 'moitran/cicd-training'
         PR_STATE = "${GITHUB_PR_STATE}"
@@ -33,7 +34,8 @@ pipeline {
 
         stage('Unit Test') {
             steps {
-                sh 'vendor/bin/phpunit --coverage-clover=\'reports/coverage/coverage.xml\''
+                sh './bin/phpunit --coverage-clover coverage.xml'
+                sh 'curl -s https://codecov.io/bash | bash -s - -t ${SUPERHEROS_API_CODECOV_TOKEN}'
             }
         }
 
@@ -77,6 +79,7 @@ pipeline {
                                 docker pull ${DOCKER_IMAGE}
                                 docker stop superheroes-api || true
                                 docker rm superheroes-api || true
+                                docker image prune -a -f
                                 docker run -d -p 80:80 --name superheroes-api --add-host host.docker.internal:host-gateway ${DOCKER_IMAGE}:latest
                                 exit
                             EOF'''
