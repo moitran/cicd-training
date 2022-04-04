@@ -24,6 +24,5 @@ class SampleServiceTest extends KernelTestCase
          * @var $mock SampleService
          */
         $this->assertEquals(3, $mock->sum(1, 2));
-        $this->assertEquals(4, $mock->sum(1, 2));
     }
 }
