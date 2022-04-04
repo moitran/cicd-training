@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\SuperheroBySlug;
 
 
 /**
@@ -14,7 +15,39 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="superheroes")
  * @ApiResource(
  *   normalizationContext={"groups" = {"read"}},
- *   denormalizationContext={"groups" = {"write"}}
+ *   denormalizationContext={"groups" = {"write"}},
+ *   itemOperations={
+ *     "get",
+ *     "patch",
+ *     "delete",
+ *     "put",
+ *     "get_by_slug" = {
+ *       "method" = "GET",
+ *       "path" = "/superhero/{slug}",
+ *       "controller" = SuperheroBySlug::class,
+ *       "read"=false,
+ *       "openapi_context" = {
+ *         "parameters" = {
+ *           {
+ *             "name" = "slug",
+ *             "in" = "path",
+ *             "description" = "The slug of your superhero",
+ *             "type" = "string",
+ *             "required" = true,
+ *             "example"= "superman",
+ *           },
+ *           {
+ *             "name" = "id",
+ *             "in" = "path",
+ *             "description" = "The id of your superhero",
+ *             "type" = "int",
+ *             "required" = false,
+ *             "example"= "1",
+ *           },
+ *         },
+ *       },
+ *     },
+ *   }
  * )
  */
 class Superheroes
